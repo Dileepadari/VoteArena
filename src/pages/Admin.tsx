@@ -1,31 +1,51 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "@/context/GameContext";
 import Header from "@/components/Header";
 import AdminPanel from "@/components/AdminPanel";
 import { Button } from "@/components/ui/button";
-import { AlarmCheck } from "lucide-react";
+import { AlarmCheck, AlertTriangle } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { isLocalStorageAvailable } from "@/lib/storage";
 
 const Admin = () => {
   const navigate = useNavigate();
   const { game } = useGame();
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
   
   useEffect(() => {
     document.title = "Admin Panel | Team Vote";
     
-    // Performance warning for localStorage in private browsing
-    if (!navigator.cookieEnabled) {
-      console.warn("Cookies disabled - this may affect application performance");
-    }
+    // Check various browser storage limitations
+    const checkStorageLimitations = () => {
+      // Check for cookies enabled
+      if (!navigator.cookieEnabled) {
+        setStorageWarning("Cookies are disabled - this may affect application functionality");
+        return;
+      }
+      
+      // Check for localStorage support/availability
+      if (!isLocalStorageAvailable()) {
+        setStorageWarning("LocalStorage is not available (possibly in private browsing) - using memory storage fallback");
+        return;
+      }
+      
+      // Check for storage quotas in private browsing modes
+      try {
+        // Try to write a large string to test quota
+        const testString = "a".repeat(100000);
+        localStorage.setItem("storage-test", testString);
+        localStorage.removeItem("storage-test");
+      } catch (e) {
+        setStorageWarning("Limited storage quota detected - consider using regular browsing mode for best performance");
+        return;
+      }
+      
+      setStorageWarning(null);
+    };
     
-    // Check for localStorage support/availability
-    try {
-      localStorage.setItem('test', 'test');
-      localStorage.removeItem('test');
-    } catch (e) {
-      console.error("LocalStorage not available - voting functionality may be impaired");
-    }
+    checkStorageLimitations();
   }, []);
 
   return (
@@ -45,6 +65,16 @@ const Admin = () => {
             </div>
           )}
         </div>
+        
+        {storageWarning && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Storage Warning</AlertTitle>
+            <AlertDescription>
+              {storageWarning}
+            </AlertDescription>
+          </Alert>
+        )}
         
         <AdminPanel />
       </main>
