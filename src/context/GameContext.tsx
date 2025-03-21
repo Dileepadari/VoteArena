@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Game, Team, Vote, GameContextType } from "@/lib/types";
 import {
   getGame,
@@ -9,7 +9,8 @@ import {
   getTeamAverageScore as getTeamAvgScore,
   getTeamVotes,
   getDeviceId,
-  clearAllData
+  clearAllData,
+  invalidateScoreCache
 } from "@/lib/storage";
 import { useToast } from "@/hooks/use-toast";
 
@@ -33,6 +34,10 @@ const GameContext = createContext<GameContextType>({
   voteCount: () => 0,
   resetGame: () => {},
 });
+
+// Performance optimization for high concurrency
+let voteSubmissionThrottled = false;
+const THROTTLE_TIMEOUT = 100; // ms
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -75,15 +80,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [timerRunning, timeRemaining]);
 
   // Game management functions
-  const setGame = (newGame: Game | null) => {
+  const setGame = useCallback((newGame: Game | null) => {
     setGameState(newGame);
     if (newGame) {
       saveGame(newGame);
       setTimeRemaining(newGame.timerDuration);
     }
-  };
+  }, []);
 
-  const createGame = (
+  const createGame = useCallback((
     name: string,
     teamCount: number,
     roundCount: number,
@@ -112,9 +117,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Game Created",
       description: `${name} has been created with ${teamCount} teams and ${roundCount} rounds.`,
     });
-  };
+  }, [setGame, toast]);
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (game && !timerRunning) {
       setTimerRunning(true);
       toast({
@@ -122,9 +127,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         description: "The voting period has begun!",
       });
     }
-  };
+  }, [game, timerRunning, toast]);
 
-  const stopTimer = () => {
+  const stopTimer = useCallback(() => {
     if (timerRunning) {
       setTimerRunning(false);
       toast({
@@ -132,9 +137,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         description: "The voting period has been paused.",
       });
     }
-  };
+  }, [timerRunning, toast]);
 
-  const nextTeam = () => {
+  const nextTeam = useCallback(() => {
     if (!game) return;
     
     const nextIndex = (game.currentTeamIndex + 1) % game.teams.length;
@@ -152,9 +157,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Next Team",
       description: `Now voting for ${game.teams[nextIndex].name}`,
     });
-  };
+  }, [game, setGame, toast]);
 
-  const prevTeam = () => {
+  const prevTeam = useCallback(() => {
     if (!game) return;
     
     const prevIndex = (game.currentTeamIndex - 1 + game.teams.length) % game.teams.length;
@@ -172,9 +177,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Previous Team",
       description: `Now voting for ${game.teams[prevIndex].name}`,
     });
-  };
+  }, [game, setGame, toast]);
 
-  const nextRound = () => {
+  const nextRound = useCallback(() => {
     if (!game || game.currentRound >= game.totalRounds) return;
     
     const updatedGame = {
@@ -191,9 +196,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Next Round",
       description: `Round ${updatedGame.currentRound} has started!`,
     });
-  };
+  }, [game, setGame, toast]);
 
-  const prevRound = () => {
+  const prevRound = useCallback(() => {
     if (!game || game.currentRound <= 1) return;
     
     const updatedGame = {
@@ -210,9 +215,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Previous Round",
       description: `Returned to Round ${updatedGame.currentRound}`,
     });
-  };
+  }, [game, setGame, toast]);
 
-  const submitVote = (teamId: string, round: number, rating: number): boolean => {
+  // Optimized for high-concurrency vote submission
+  const submitVote = useCallback((teamId: string, round: number, rating: number): boolean => {
+    // Check if already voted
     if (hasVotedStorage(teamId, round)) {
       toast({
         title: "Already Voted",
@@ -222,6 +229,30 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       return false;
     }
     
+    // Throttle submissions to prevent localStorage hammering
+    if (voteSubmissionThrottled) {
+      setTimeout(() => {
+        const vote: Vote = {
+          teamId,
+          round,
+          rating,
+          deviceId: getDeviceId(),
+          timestamp: new Date().toISOString(),
+        };
+        
+        saveVote(vote);
+        invalidateScoreCache();
+      }, Math.random() * THROTTLE_TIMEOUT);
+      
+      toast({
+        title: "Vote Submitted",
+        description: `You rated the team ${rating} out of 5!`,
+      });
+      
+      return true;
+    }
+    
+    // Normal submission
     const vote: Vote = {
       teamId,
       round,
@@ -231,6 +262,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     
     saveVote(vote);
+    invalidateScoreCache();
+    
+    // Throttle for a short period
+    voteSubmissionThrottled = true;
+    setTimeout(() => {
+      voteSubmissionThrottled = false;
+    }, THROTTLE_TIMEOUT);
     
     toast({
       title: "Vote Submitted",
@@ -238,17 +276,17 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     
     return true;
-  };
+  }, [toast]);
 
-  const hasVoted = (teamId: string, round: number): boolean => {
+  const hasVoted = useCallback((teamId: string, round: number): boolean => {
     return hasVotedStorage(teamId, round);
-  };
+  }, []);
 
-  const getTeamAverageScore = (teamId: string, round?: number): number => {
+  const getTeamAverageScore = useCallback((teamId: string, round?: number): number => {
     return getTeamAvgScore(teamId, round);
-  };
+  }, []);
 
-  const getTeamTotalScore = (teamId: string): number => {
+  const getTeamTotalScore = useCallback((teamId: string): number => {
     if (!game) return 0;
     
     let total = 0;
@@ -257,13 +295,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     
     return parseFloat((total).toFixed(1));
-  };
+  }, [game]);
 
-  const voteCount = (teamId: string, round: number): number => {
+  const voteCount = useCallback((teamId: string, round: number): number => {
     return getTeamVotes(teamId, round).length;
-  };
+  }, []);
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     clearAllData();
     setGameState(null);
     setTimeRemaining(0);
@@ -272,7 +310,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       title: "Game Reset",
       description: "All game data has been cleared.",
     });
-  };
+  }, [toast]);
 
   return (
     <GameContext.Provider
