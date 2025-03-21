@@ -26,6 +26,7 @@ const AdminPanel = ({ className }: AdminPanelProps) => {
     prevRound,
     resetGame, 
     timerRunning,
+    setGame
   } = useGame();
   
   const [gameName, setGameName] = useState("");
@@ -130,7 +131,7 @@ const AdminPanel = ({ className }: AdminPanelProps) => {
       teams: updatedTeams,
     };
     
-    useGame().setGame(updatedGame);
+    setGame(updatedGame);
     setIsEditing(false);
   };
   
