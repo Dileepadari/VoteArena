@@ -269,6 +269,8 @@ bite you:
 - **A `useLayoutEffect` repaints after commit.** New nodes' refs only exist after the
   render lands; the rAF loop would catch up on its next frame, but the settled path has
   no next frame.
+- **Two buttons in the console are both visibly labelled "Add"** (new question, and add
+  options). They carry distinct `aria-label`s, so match on those rather than the text.
 - **Settled mode.** When the tab is hidden (rAF is suspended) or the reader prefers
   reduced motion, the physics is run synchronously with `sim.tick(400)` and painted
   once. Radii must be applied *before* ticking, or collision runs at radius ~1 and the
@@ -327,11 +329,15 @@ npm run test:e2e     # Playwright, builds required first
   `hello`/`session`/`tally` sequence, a write-in reaching the wall as an option before
   the count that references it, and that a 40-vote burst produces far fewer frames than
   votes.
-- **`tests/e2e/vote.spec.ts`** (Playwright, Chromium) drives the built production server
-  through the browser, using a separate browser context per voter so each is genuinely
-  a different device: both question types end to end, spelling merge, one-vote-per-device
-  across a reload, a lobby voter pushed into a question live, closing a question, and a
-  bad code.
+- **`tests/e2e/vote.spec.ts`** (9 tests, Playwright/Chromium) drives the built production
+  server through the browser, using a separate browser context per voter so each is
+  genuinely a different device: both question types end to end, spelling merge,
+  one-vote-per-device across a reload, a lobby voter pushed into a question live,
+  closing a question, a bad code, question reordering, and a phone-width pass asserting
+  none of the three surfaces scroll sideways at 360px.
+- One of them is a regression test worth knowing about: **a host reset must free a voter
+  who already has the page open**. The receipt is client state, and before the fix it
+  survived the reset, silently locking every open phone out of the re-run.
 
 Deliberately not covered: the visual output of the force simulation (asserted through
 the DOM, not pixels), and real cross-network latency.

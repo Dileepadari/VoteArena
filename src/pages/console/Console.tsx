@@ -1,4 +1,6 @@
 import {
+  ChevronDown,
+  ChevronUp,
   ExternalLink,
   Eye,
   Link2,
@@ -212,7 +214,14 @@ export function Console() {
         <div className={styles.column}>
           <div className={styles.sectionHead}>
             <h2 className={styles.cardTitle}>Questions</h2>
-            <button className="btn btn--sm btn--primary" onClick={() => setCreating(true)}>
+            {/* The visible label stays short for the sidebar, but the accessible
+                name has to distinguish this from the "Add" that adds options to
+                a question further down the page. */}
+            <button
+              className="btn btn--sm btn--primary"
+              onClick={() => setCreating(true)}
+              aria-label="New question"
+            >
               <ListPlus size={14} />
               Add
             </button>
@@ -225,26 +234,59 @@ export function Console() {
           ) : (
             <div className={styles.list}>
               {questions.map((question, index) => (
-                <button
+                <div
                   key={question.id}
                   className={styles.item}
                   data-selected={question.id === selected?.id}
                   data-status={question.status}
-                  onClick={() => setSelectedId(question.id)}
                 >
-                  <span className={styles.itemIndex}>{index + 1}</span>
-                  <span className={styles.itemBody}>
-                    <span className={styles.itemPrompt}>{question.prompt}</span>
-                    <span className={styles.itemMeta}>
-                      <span className={`pill pill--${question.status === "open" ? "live" : question.status}`}>
-                        {question.status}
+                  <button
+                    className={styles.itemSelect}
+                    onClick={() => setSelectedId(question.id)}
+                  >
+                    <span className={styles.itemIndex}>{index + 1}</span>
+                    <span className={styles.itemBody}>
+                      <span className={styles.itemPrompt}>{question.prompt}</span>
+                      <span className={styles.itemMeta}>
+                        <span
+                          className={`pill pill--${question.status === "open" ? "live" : question.status}`}
+                        >
+                          {question.status}
+                        </span>
+                        {question.type === "pool" ? "Open field" : "Fixed answers"}
+                        {" · "}
+                        {tallies[question.id]?.totalBallots ?? 0} votes
                       </span>
-                      {question.type === "pool" ? "Open field" : "Fixed answers"}
-                      {" · "}
-                      {tallies[question.id]?.totalBallots ?? 0} votes
                     </span>
+                  </button>
+
+                  <span className={styles.reorder}>
+                    <button
+                      className={styles.reorderBtn}
+                      disabled={index === 0}
+                      aria-label={`Move "${question.prompt}" up`}
+                      onClick={() =>
+                        void mutate(() =>
+                          api.updateQuestion(question.id, adminToken, { position: index - 1 }),
+                        )
+                      }
+                    >
+                      <ChevronUp size={12} />
+                    </button>
+                    <button
+                      className={styles.reorderBtn}
+                      disabled={index === questions.length - 1}
+                      aria-label={`Move "${question.prompt}" down`}
+                      onClick={() =>
+                        void mutate(() =>
+                          api.updateQuestion(question.id, adminToken, { position: index + 1 }),
+                        )
+                      }
+                    >
+                      <ChevronDown size={12} />
+                    </button>
                   </span>
-                </button>
+                </div>
               ))}
             </div>
           )}

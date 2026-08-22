@@ -282,6 +282,7 @@ export function QuestionEditor({
         <div className={styles.row}>
           <button
             className="btn btn--sm btn--primary"
+            aria-label="Add options"
             disabled={pending.length === 0}
             onClick={async () => {
               const created = await mutate(

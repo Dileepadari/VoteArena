@@ -1,5 +1,5 @@
 import { Check, Hourglass, Plus, Radio, Search, Trophy } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { QuestionDTO, TallyDTO } from "../../shared/types";
 import { Brand } from "../components/Brand";
@@ -37,17 +37,44 @@ export function Vote() {
 
   // What this device has already answered, so a refresh or a returning voter
   // sees their receipt rather than an empty ballot they can fill in again.
+  const refreshMe = useCallback(
+    (signal?: AbortSignal) => {
+      if (!code) return;
+      api
+        .me(code, signal)
+        .then((state) => setMyBallots(state.ballots))
+        .catch(() => {
+          /* the vote call itself is the real guard; this is only for display */
+        });
+    },
+    [code],
+  );
+
   useEffect(() => {
-    if (!code) return;
     const controller = new AbortController();
-    api
-      .me(code, controller.signal)
-      .then((state) => setMyBallots(state.ballots))
-      .catch(() => {
-        /* the vote call itself is the real guard; this is only for display */
-      });
+    refreshMe(controller.signal);
     return () => controller.abort();
-  }, [code]);
+  }, [refreshMe]);
+
+  // A host reset is the only thing that can make a tally shrink. When it does,
+  // the receipt on this screen is stale: the ballot was deleted server-side and
+  // this device may vote again. Without this, everyone still holding the page
+  // open is locked out of a re-run.
+  const seenBallotCounts = useRef<Record<string, number>>({});
+  useEffect(() => {
+    if (!question) return;
+    const previous = seenBallotCounts.current[question.id];
+    seenBallotCounts.current[question.id] = tally.totalBallots;
+    if (previous !== undefined && tally.totalBallots < previous) {
+      setMyBallots((prev) => {
+        if (!(question.id in prev)) return prev;
+        const next = { ...prev };
+        delete next[question.id];
+        return next;
+      });
+      refreshMe();
+    }
+  }, [question, tally.totalBallots, refreshMe]);
 
   // Moving to a new question clears whatever was half-selected on the last one.
   useEffect(() => {
