@@ -1,0 +1,164 @@
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--r5) var(--r6);
+  gap: var(--r4);
+}
+
+.main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--r5) var(--r5) var(--r8);
+}
+
+.hero {
+  width: min(560px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--r6);
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(40px, 8vw, 68px);
+  font-variation-settings: "opsz" 40, "wdth" 100;
+  line-height: 0.98;
+}
+
+.title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.lede {
+  color: var(--fg-muted);
+  font-size: clamp(15px, 2.4vw, 18px);
+  max-width: 40ch;
+  text-wrap: balance;
+}
+
+.joinCard {
+  width: 100%;
+  padding: var(--r6) var(--r5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--r4);
+  background: linear-gradient(180deg, var(--panel), #0c0c10);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+}
+
+.codeInput {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 7vw, 40px);
+  font-weight: 700;
+  /* Wide tracking makes a six-character code far easier to check by eye. */
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  padding: var(--r4) var(--r3);
+  text-transform: uppercase;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--fg);
+  transition: border-color 160ms var(--ease-out);
+}
+
+.codeInput::placeholder {
+  color: #2e2e38;
+  letter-spacing: 0.32em;
+}
+
+.codeInput:focus {
+  outline: none;
+  border-color: #4a5c2c;
+}
+
+.error {
+  color: var(--coral);
+  font-size: 13px;
+  min-height: 18px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--r4);
+  color: var(--fg-faint);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-soft);
+}
+
+.recent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--r2);
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r4);
+  padding: var(--r3) var(--r4);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  background: var(--panel);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 160ms var(--ease-out), background 160ms var(--ease-out);
+}
+
+.recentRow:hover {
+  border-color: var(--line);
+  background: var(--raised);
+}
+
+.recentTitle {
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  padding: var(--r5) var(--r6);
+  text-align: center;
+  color: var(--fg-faint);
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  .nav {
+    padding: var(--r4);
+  }
+  .joinCard {
+    padding: var(--r5) var(--r4);
+  }
+}

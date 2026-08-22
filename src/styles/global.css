@@ -1,0 +1,408 @@
+/* ============================================================================
+   VoteArena design tokens
+
+   One dark theme, tuned for two very different surfaces: a phone held at arm's
+   length in a dim room, and a projector at the back of a hall. Everything is
+   sized from a 4px rhythm and the type scale is deliberately wide, because the
+   wall needs numbers that read from 20 metres and the phone needs tap targets
+   that forgive a thumb.
+   ========================================================================= */
+
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+:root {
+  /* Surfaces, darkest to lightest */
+  --ink: #08080a;
+  --panel: #0f0f13;
+  --raised: #16161c;
+  --overlay: #1d1d25;
+  --line: #26262f;
+  --line-soft: #1b1b22;
+
+  /* Text */
+  --fg: #f3f3f5;
+  --fg-muted: #9b9ba7;
+  --fg-faint: #66667a;
+
+  /* Accents */
+  --lime: #c6f24e;
+  --lime-dim: #9dc433;
+  --coral: #ff5c49;
+  --cyan: #4fd8e8;
+  --violet: #a78bfa;
+  --amber: #ffc24b;
+
+  --accent: var(--lime);
+  --accent-ink: #10160a;
+
+  /* Categorical ramp for bubbles and bars. Ordered so neighbours stay
+     distinguishable when two options end up adjacent in the ranking. */
+  --c1: #c6f24e;
+  --c2: #4fd8e8;
+  --c3: #ff5c49;
+  --c4: #a78bfa;
+  --c5: #ffc24b;
+  --c6: #5eead4;
+  --c7: #f472b6;
+  --c8: #7dd3fc;
+
+  /* Type */
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;
+  --font-ui: "Inter Variable", Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Rhythm */
+  --r1: 4px;
+  --r2: 8px;
+  --r3: 12px;
+  --r4: 16px;
+  --r5: 24px;
+  --r6: 32px;
+  --r7: 48px;
+  --r8: 64px;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 6%) inset, 0 8px 24px -12px rgb(0 0 0 / 80%);
+  --shadow-pop: 0 24px 60px -24px rgb(0 0 0 / 90%);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------- reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--fg);
+  background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Stops the rubber-band flash of white behind the wall on iOS. */
+  overscroll-behavior: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* The mark ships as solid purple on transparent; brightness(0) flattens it to a
+   silhouette that we then invert for this dark UI. One file, both treatments. */
+.logo-mono {
+  filter: brightness(0) invert(1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--accent-ink);
+}
+
+/* ------------------------------------------------------------------- type */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-variation-settings: "opsz" 24;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ------------------------------------------------------------- primitives */
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.btn {
+  --btn-bg: var(--raised);
+  --btn-fg: var(--fg);
+  --btn-line: var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--r2);
+  padding: 0 var(--r5);
+  min-height: 46px;
+  border: 1px solid var(--btn-line);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    transform 140ms var(--ease-out),
+    background 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    opacity 140ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--overlay);
+  border-color: #35353f;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--accent-ink);
+  --btn-line: transparent;
+  font-weight: 700;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #d4ff5e;
+  border-color: transparent;
+}
+
+.btn--danger {
+  --btn-fg: var(--coral);
+  --btn-line: #3a2020;
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-line: transparent;
+  --btn-fg: var(--fg-muted);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  --btn-fg: var(--fg);
+  background: var(--raised);
+}
+
+.btn--sm {
+  min-height: 34px;
+  padding: 0 var(--r3);
+  font-size: 13px;
+}
+
+.btn--lg {
+  min-height: 56px;
+  font-size: 17px;
+  padding: 0 var(--r6);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r2);
+}
+
+.field > label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px var(--r4);
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  transition: border-color 140ms var(--ease-out), background 140ms var(--ease-out);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--fg-faint);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #3d4a2a;
+  background: #0b0d07;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 96px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--raised);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.pill--live {
+  color: var(--lime);
+  border-color: #35431a;
+  background: #171d0c;
+}
+
+.pill--closed {
+  color: var(--fg-faint);
+}
+
+.pill--draft {
+  color: var(--amber);
+  border-color: #40361a;
+  background: #1c170a;
+}
+
+/* A live dot that actually pulses, rather than a static green circle. */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  position: relative;
+  flex: none;
+}
+
+.dot--live::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  animation: dot-pulse 1.8s var(--ease-out) infinite;
+}
+
+@keyframes dot-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- effects */
+
+/* Stage lighting: a soft off-centre pool of accent behind the content, so the
+   wall does not read as a flat black rectangle when projected. */
+.stage-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(60% 45% at 22% 0%, rgb(198 242 78 / 7%), transparent 70%),
+    radial-gradient(50% 40% at 88% 12%, rgb(79 216 232 / 6%), transparent 70%);
+}
+
+/* Fine film grain. Kills the banding that large dark gradients show on a
+   projector and gives the surface some texture. */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

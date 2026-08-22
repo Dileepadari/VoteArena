@@ -1,0 +1,71 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  /* The accent at low alpha, per the house mark treatment. */
+  background: rgb(198 242 78 / 14%);
+  flex: none;
+}
+
+.badge img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.subtitle {
+  color: var(--fg-faint);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.sm .badge {
+  width: 26px;
+  height: 26px;
+}
+.sm .name {
+  font-size: 15px;
+}
+
+.md .badge {
+  width: 34px;
+  height: 34px;
+}
+.md .name {
+  font-size: 19px;
+}
+
+.lg .badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+}
+.lg .name {
+  font-size: 27px;
+}

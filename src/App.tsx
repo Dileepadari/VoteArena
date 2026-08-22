@@ -1,37 +1,32 @@
+import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
+import { ToastProvider } from "./components/Toast";
+import { Console } from "./pages/console/Console";
+import { Host } from "./pages/Host";
+import { Landing } from "./pages/Landing";
+import { NotFound } from "./pages/NotFound";
+import { Vote } from "./pages/Vote";
+import { Wall } from "./pages/Wall";
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { GameProvider } from "@/context/GameContext";
-import Index from "./pages/Index";
-import Admin from "./pages/Admin";
-import Vote from "./pages/Vote";
-import Results from "./pages/Results";
-import NotFound from "./pages/NotFound";
+/** Older/shorter share links land here and are normalised onto /v/:code. */
+function JoinRedirect() {
+  const { code } = useParams();
+  return <Navigate to={`/v/${(code ?? "").toUpperCase()}`} replace />;
+}
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <GameProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/vote" element={<Vote />} />
-            <Route path="/results" element={<Results />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </GameProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
-
-export default App;
+export function App() {
+  return (
+    <BrowserRouter>
+      <ToastProvider>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/host" element={<Host />} />
+          <Route path="/c/:code" element={<Console />} />
+          <Route path="/w/:code" element={<Wall />} />
+          <Route path="/v/:code" element={<Vote />} />
+          <Route path="/j/:code" element={<JoinRedirect />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ToastProvider>
+    </BrowserRouter>
+  );
+}

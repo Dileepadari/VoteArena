@@ -1,0 +1,345 @@
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r3);
+  padding: var(--r4) var(--r4) var(--r3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(var(--ink) 62%, transparent);
+}
+
+.sessionTitle {
+  font-size: 12px;
+  color: var(--fg-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 46vw;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--r5);
+  padding: var(--r2) var(--r4) var(--r5);
+  width: min(620px, 100%);
+  margin: 0 auto;
+}
+
+.prompt {
+  font-size: clamp(26px, 7vw, 38px);
+  text-wrap: balance;
+  font-variation-settings: "opsz" 32;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  flex-wrap: wrap;
+  margin-top: var(--r3);
+}
+
+/* ------------------------------------------------------------- options */
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r2);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--r3);
+  width: 100%;
+  min-height: 60px;
+  padding: var(--r3) var(--r4);
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--fg);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 160ms var(--ease-out),
+    background 160ms var(--ease-out),
+    transform 220ms var(--ease-spring);
+}
+
+.option:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.option[data-selected="true"] {
+  border-color: var(--accent);
+  background: #151a0b;
+}
+
+.option:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tick {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: border-color 160ms var(--ease-out), background 160ms var(--ease-out);
+}
+
+.option[data-selected="true"] .tick {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.optionLabel {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.writeInFlag {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  flex: none;
+}
+
+/* ------------------------------------------------------------- write-in */
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--fg-faint);
+  pointer-events: none;
+}
+
+.searchWrap .search {
+  padding-left: 42px;
+  min-height: 52px;
+}
+
+.addRow {
+  display: flex;
+  align-items: center;
+  gap: var(--r3);
+  width: 100%;
+  min-height: 60px;
+  padding: var(--r3) var(--r4);
+  border: 1px dashed #3f4a2a;
+  background: #12160a;
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms var(--ease-out);
+}
+
+.addRow:hover {
+  background: #171d0c;
+}
+
+.addRowLabel {
+  flex: 1;
+  color: var(--fg);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.noMatch {
+  padding: var(--r5) var(--r4);
+  text-align: center;
+  color: var(--fg-faint);
+  font-size: 14px;
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  padding: var(--r4);
+  padding-bottom: max(var(--r4), env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, var(--ink) 34%);
+}
+
+/* Matches the content column above it, so the button does not run wider than
+   the ballot it belongs to on a tablet or a desktop browser. */
+.footerInner {
+  width: min(620px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--r2);
+}
+
+.hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--fg-faint);
+  min-height: 16px;
+}
+
+/* ----------------------------------------------------------- states */
+
+.state {
+  flex: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--r4);
+  text-align: center;
+  padding: var(--r7) var(--r5);
+}
+
+.stateTitle {
+  font-size: clamp(22px, 6vw, 30px);
+}
+
+.stateBody {
+  color: var(--fg-muted);
+  max-width: 34ch;
+  text-wrap: balance;
+}
+
+.pulseRing {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--fg-faint);
+  position: relative;
+}
+
+.pulseRing::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  animation: ring 2.6s var(--ease-out) infinite;
+}
+
+@keyframes ring {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* ----------------------------------------------------------- voted view */
+
+.voted {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r5);
+}
+
+.receipt {
+  display: flex;
+  align-items: center;
+  gap: var(--r3);
+  padding: var(--r4);
+  border-radius: var(--radius);
+  border: 1px solid #35431a;
+  background: #141a09;
+  animation: receipt-in 460ms var(--ease-spring);
+}
+
+@keyframes receipt-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+
+.receiptIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.receiptText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.receiptTitle {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.receiptChoice {
+  color: var(--fg-muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.resultsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--r3);
+  margin-bottom: var(--r3);
+}
+
+.bubbleBox {
+  height: min(46dvh, 380px);
+  border-radius: var(--radius);
+  border: 1px solid var(--line-soft);
+  background: #0b0b0e;
+  overflow: hidden;
+}
+
+.hiddenNote {
+  padding: var(--r6) var(--r4);
+  text-align: center;
+  color: var(--fg-faint);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  font-size: 14px;
+}

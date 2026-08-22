@@ -1,0 +1,138 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+/* Rows are absolutely positioned and moved with transform, so a rank change
+   animates as the two bars sliding past each other rather than a reflow. */
+.row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--r4);
+  transition:
+    transform 620ms var(--ease-out),
+    opacity 380ms var(--ease-out);
+  will-change: transform;
+}
+
+.rank {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-faint);
+  text-align: right;
+  letter-spacing: -0.04em;
+  transition: color 400ms var(--ease-out);
+}
+
+.leader .rank {
+  color: var(--fg);
+}
+
+.bar {
+  position: relative;
+  border-radius: var(--radius-sm);
+  background: var(--raised);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-sm);
+  transition: width 700ms var(--ease-out);
+  opacity: 0.9;
+}
+
+/* A moving sheen along the leading bar while the vote is open. */
+.fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgb(255 255 255 / 22%) 50%, transparent 80%);
+  transform: translateX(-100%);
+}
+
+.leader.open .fill::after {
+  animation: sheen 2.6s var(--ease-out) infinite;
+}
+
+@keyframes sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  padding-inline: var(--r4);
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* The dark twin, clipped to exactly the filled width. Where the bar has colour
+   behind it the reader sees this copy; past the fill edge the light one shows
+   through. A single colour cannot do both, and the boundary can fall anywhere
+   inside a word. */
+.labelOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  color: #0a0a0c;
+  pointer-events: none;
+  transition: clip-path 700ms var(--ease-out);
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--r2);
+  justify-content: flex-end;
+}
+
+.count {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  transition: color 400ms var(--ease-out);
+}
+
+.pct {
+  font-size: 0.72em;
+  color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.mine {
+  width: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--fg);
+  align-self: stretch;
+  flex: none;
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  gap: var(--r3);
+  padding: var(--r8) 0;
+  color: var(--fg-faint);
+  text-align: center;
+}

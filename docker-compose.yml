@@ -1,0 +1,19 @@
+services:
+  votearena:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - votearena-data:/data
+    environment:
+      # Required. Generate once with: openssl rand -hex 32
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env before starting}
+      # The origin people reach, not the container address. QR codes use this.
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:4000}
+      # 1 when a reverse proxy terminates TLS in front of this service.
+      TRUST_PROXY: ${TRUST_PROXY:-0}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+
+volumes:
+  votearena-data:

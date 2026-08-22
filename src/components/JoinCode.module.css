@@ -1,0 +1,62 @@
+.button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.code {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.char {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--fg);
+  transition: border-color 200ms var(--ease-out), transform 200ms var(--ease-spring);
+}
+
+.button:hover .char {
+  border-color: #3d4a2a;
+}
+
+.button:active .char {
+  transform: translateY(1px);
+}
+
+.sm .char {
+  width: 22px;
+  height: 28px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.md .char {
+  width: 32px;
+  height: 42px;
+  font-size: 20px;
+}
+
+.lg .char {
+  width: 46px;
+  height: 60px;
+  font-size: 28px;
+  border-radius: 10px;
+}
+
+/* Sized to be read from the back of a hall. */
+.wall .char {
+  width: clamp(48px, 5.2vw, 96px);
+  height: clamp(64px, 7vw, 128px);
+  font-size: clamp(30px, 3.6vw, 68px);
+  border-radius: 14px;
+  background: #101014;
+  gap: 10px;
+}

@@ -1,0 +1,70 @@
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  padding: var(--r5) var(--r6);
+}
+
+.main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--r5);
+}
+
+.card {
+  width: min(500px, 100%);
+  padding: clamp(24px, 5vw, 40px);
+  background: linear-gradient(180deg, var(--panel), #0c0c10);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  gap: var(--r5);
+}
+
+.title {
+  font-size: clamp(26px, 5vw, 34px);
+}
+
+.lede {
+  color: var(--fg-muted);
+  font-size: 15px;
+  margin-top: var(--r2);
+  text-wrap: balance;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r4);
+}
+
+.error {
+  color: var(--coral);
+  font-size: 13px;
+}
+
+.note {
+  display: flex;
+  gap: var(--r3);
+  padding: var(--r4);
+  border-radius: var(--radius);
+  border: 1px solid var(--line-soft);
+  background: var(--ink);
+  color: var(--fg-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.noteIcon {
+  color: var(--amber);
+  flex: none;
+  margin-top: 2px;
+}

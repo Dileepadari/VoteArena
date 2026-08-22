@@ -1,0 +1,296 @@
+.page {
+  position: relative;
+  z-index: 2;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------- idle/lobby */
+
+.lobby {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: clamp(24px, 5vw, 80px);
+  padding: clamp(24px, 4vw, 72px);
+}
+
+.lobbyCopy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.4vw, 32px);
+  min-width: 0;
+}
+
+.lobbyTitle {
+  font-size: clamp(38px, 6.2vw, 104px);
+  line-height: 0.94;
+  font-variation-settings: "opsz" 48;
+  text-wrap: balance;
+}
+
+.lobbySteps {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vw, 18px);
+  list-style: none;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  font-size: clamp(15px, 1.5vw, 24px);
+  color: var(--fg-muted);
+}
+
+.stepNum {
+  display: grid;
+  place-items: center;
+  width: clamp(28px, 2.6vw, 44px);
+  height: clamp(28px, 2.6vw, 44px);
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.1vw, 17px);
+  font-weight: 700;
+  color: var(--accent);
+  flex: none;
+}
+
+.stepStrong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.lobbyQr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+}
+
+.qrFrame {
+  position: relative;
+  padding: clamp(16px, 1.8vw, 28px);
+  border-radius: clamp(18px, 2vw, 30px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pop);
+}
+
+.qrMark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 13%;
+  height: 13%;
+  object-fit: contain;
+}
+
+.joinUrl {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.15vw, 19px);
+  color: var(--fg-muted);
+  letter-spacing: -0.01em;
+  word-break: break-all;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- active */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 48px);
+  padding: clamp(18px, 2.4vw, 40px) clamp(20px, 3vw, 56px) clamp(10px, 1.4vw, 20px);
+}
+
+.question {
+  font-size: clamp(28px, 4.4vw, 76px);
+  line-height: 0.98;
+  font-variation-settings: "opsz" 44;
+  text-wrap: balance;
+  min-width: 0;
+}
+
+.headMeta {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.2vw, 20px);
+  flex: none;
+}
+
+/* The headline number: the thing the room glances at. */
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 0.9;
+}
+
+.counterValue {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  font-size: clamp(40px, 5.4vw, 96px);
+  color: var(--accent);
+}
+
+.counterLabel {
+  font-size: clamp(10px, 0.85vw, 14px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-top: 6px;
+}
+
+.stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(16px, 2.4vw, 44px);
+  padding: 0 clamp(20px, 3vw, 56px) clamp(18px, 2.4vw, 40px);
+  min-height: 0;
+}
+
+.viz {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.boardScroll {
+  overflow: hidden;
+  padding-top: clamp(8px, 1vw, 16px);
+}
+
+.rail {
+  width: clamp(180px, 15vw, 260px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(10px, 1.2vw, 18px);
+  padding-bottom: 4px;
+}
+
+.railQr {
+  padding: clamp(10px, 1vw, 16px);
+  border-radius: clamp(12px, 1.2vw, 20px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  position: relative;
+}
+
+.railHint {
+  font-size: clamp(10px, 0.85vw, 14px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  text-align: center;
+}
+
+.railCode {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(20px, 2vw, 34px);
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------- chrome */
+
+.chrome {
+  position: absolute;
+  top: clamp(14px, 1.6vw, 26px);
+  right: clamp(14px, 1.6vw, 26px);
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out);
+}
+
+/* Controls stay out of the way while projecting and appear on mouse move. */
+.page:hover .chrome,
+.chrome:focus-within {
+  opacity: 1;
+}
+
+.footerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r4);
+  padding: clamp(10px, 1.2vw, 18px) clamp(20px, 3vw, 56px);
+  border-top: 1px solid var(--line-soft);
+}
+
+.footerNote {
+  font-size: clamp(10px, 0.85vw, 13px);
+  color: var(--fg-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.closedBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  background: #1c170a;
+  border: 1px solid #40361a;
+  color: var(--amber);
+  font-size: clamp(11px, 1vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hiddenVeil {
+  flex: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--r4);
+  text-align: center;
+  color: var(--fg-faint);
+}
+
+.hiddenCount {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(60px, 11vw, 190px);
+  letter-spacing: -0.05em;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .lobby {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .lobbyCopy {
+    align-items: center;
+  }
+  .stage {
+    grid-template-columns: 1fr;
+  }
+  .rail {
+    display: none;
+  }
+}

@@ -1,0 +1,135 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  touch-action: none;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  cursor: grab;
+}
+
+.svg:active {
+  cursor: grabbing;
+}
+
+.node {
+  cursor: pointer;
+  /* Only opacity animates here; position is written directly by the tick loop,
+     so a CSS transition on transform would fight the simulation. */
+  transition: opacity 400ms var(--ease-out);
+}
+
+.node circle {
+  transition: stroke-width 180ms var(--ease-out), filter 220ms var(--ease-out);
+}
+
+.node:hover circle,
+.node[data-active="true"] circle {
+  stroke-width: 2.5;
+  filter: brightness(1.18);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  pointer-events: none;
+  fill: #0a0a0c;
+  paint-order: stroke;
+}
+
+.count {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-anchor: middle;
+  pointer-events: none;
+  fill: #0a0a0c;
+  opacity: 0.62;
+}
+
+/* The current leader gets a halo that breathes, so the eye finds it instantly
+   from the back of a room without needing to read any numbers. */
+.crown {
+  fill: none;
+  stroke-width: 1.5;
+  pointer-events: none;
+  animation: crown-breathe 2.4s var(--ease-out) infinite;
+}
+
+@keyframes crown-breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(1.06);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 14px));
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--overlay);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pop);
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tooltipSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.tooltipCount {
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--r3);
+  text-align: center;
+  color: var(--fg-faint);
+  pointer-events: none;
+}
+
+.emptyRing {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px dashed var(--line);
+  animation: spin 18s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
