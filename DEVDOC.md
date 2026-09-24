@@ -183,12 +183,12 @@ at boot. **All timestamps are ISO 8601 UTC strings** (`new Date().toISOString()`
 (`draft`|`live`|`ended`), `admin_token_hash`, `current_question_id`,
 `strict_device_check` (0|1), `created_at`, `updated_at`.
 
-**`questions`** - `id`, `session_id` → sessions (cascade), `position`, `type`
+**`questions`** - `id`, `session_id` -> sessions (cascade), `position`, `type`
 (`fixed`|`pool`), `prompt`, `status` (`draft`|`open`|`closed`), `allow_write_in` (0|1),
 `max_selections`, `results_visibility` (`live`|`after_close`|`hidden`), `opened_at`,
 `closed_at`, `created_at`.
 
-**`options`** - `id`, `question_id` → questions (cascade), `label`, `normalized_label`,
+**`options`** - `id`, `question_id` -> questions (cascade), `label`, `normalized_label`,
 `position`, `source` (`seed`|`write_in`), `created_at`.
 `UNIQUE (question_id, normalized_label)` is what merges write-ins.
 `normalizeLabel` folds case, Unicode accents (NFKD) and punctuation, so `José García`
@@ -196,11 +196,11 @@ and `jose garcia` collide by design. The first spelling seen wins the display la
 `position` is stable and drives the colour ramp, so a bubble keeps its colour as ranks
 change and adjacent bars never share one.
 
-**`ballots`** - `id`, `question_id` → questions (cascade), `voter_id`, `ip_hash`,
+**`ballots`** - `id`, `question_id` -> questions (cascade), `voter_id`, `ip_hash`,
 `fp_hash`, `created_at`, `UNIQUE (question_id, voter_id)`. One row per voter per
 question - this table *is* the one-vote rule.
 
-**`vote_choices`** - `ballot_id` → ballots (cascade), `option_id` → options (cascade),
+**`vote_choices`** - `ballot_id` -> ballots (cascade), `option_id` -> options (cascade),
 primary key on both. Splitting choices from ballots is what lets one question take
 several answers from one person while still counting them as a single voter: `voters`
 counts ballots, `selections` counts choices.
@@ -241,7 +241,7 @@ tests/              api.test.ts, stream.test.ts (vitest), e2e/ (Playwright)
 ## Theming
 
 One dark theme. Tokens are defined once on `:root` in `src/styles/global.css`: surfaces
-(`--ink` → `--overlay`), text, accents, and an eight-colour categorical ramp
+(`--ink` -> `--overlay`), text, accents, and an eight-colour categorical ramp
 (`--c1`…`--c8`) shared by both visualisations. Spacing runs on a 4px scale (`--r1`…`--r8`).
 
 The brand mark ships as one file, solid purple on transparent. `.logo-mono` applies
