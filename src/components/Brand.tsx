@@ -1,3 +1,5 @@
+/** The wordmark, sized for the page it sits on. */
+
 import { Link } from "react-router-dom";
 import styles from "./Brand.module.css";
 

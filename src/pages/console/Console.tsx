@@ -1,3 +1,5 @@
+/** The host console: the question list, and what is currently open. */
+
 import {
   ChevronDown,
   ChevronUp,

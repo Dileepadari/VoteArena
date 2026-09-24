@@ -1,3 +1,5 @@
+/** Renders whatever `lib/toast` currently holds. */
+
 import { useCallback, useMemo, useRef, useState } from "react";
 import { ToastContext, type ToastTone } from "../lib/toast";
 import styles from "./Toast.module.css";

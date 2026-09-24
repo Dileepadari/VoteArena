@@ -1,3 +1,11 @@
+/**
+ * The results wall's bubble layout.
+ *
+ * A force simulation rather than a bar chart: the bubbles settle into the space
+ * available, which reads at a glance from a distance and copes with an answer
+ * count nobody decided in advance.
+ */
+
 import {
   forceCollide,
   forceSimulation,

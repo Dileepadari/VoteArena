@@ -1,3 +1,5 @@
+/** The connection pill: live, reconnecting, or gone. */
+
 import type { LiveStatus } from "../lib/live";
 import styles from "./Status.module.css";
 

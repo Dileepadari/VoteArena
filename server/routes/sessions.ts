@@ -1,3 +1,5 @@
+/** Creating, reading and updating a session, plus the host's admin token. */
+
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { z } from "zod";

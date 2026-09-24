@@ -1,3 +1,5 @@
+/** The host's entry point, where a new session hands back its admin token. */
+
 import { KeyRound, Sparkles } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";

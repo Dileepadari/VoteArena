@@ -1,3 +1,5 @@
+/** Session-level settings: title, results visibility, the strict device check. */
+
 import { useState } from "react";
 import type { SessionDTO } from "../../../shared/types";
 import styles from "./Console.module.css";

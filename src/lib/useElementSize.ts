@@ -1,3 +1,10 @@
+/**
+ * An element's measured size, kept current with a ResizeObserver.
+ *
+ * The bubble field and the leaderboard both lay out from real pixels rather
+ * than breakpoints, because a projected wall is a size no breakpoint expects.
+ */
+
 import { useEffect, useRef, useState, type RefObject } from "react";
 
 export interface Size {

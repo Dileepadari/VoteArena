@@ -1,3 +1,5 @@
+/** Process entry point: open the database, start listening, shut down cleanly. */
+
 import { createApp } from "./app.js";
 import { config } from "./config.js";
 import { closeDb, getDb } from "./db/index.js";

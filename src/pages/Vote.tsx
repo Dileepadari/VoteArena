@@ -1,3 +1,10 @@
+/**
+ * The voter's screen, which is the only page most people will ever see.
+ *
+ * It has to work on a phone, on a bad connection, in an in-app browser, and it
+ * has to say clearly when the vote has landed.
+ */
+
 import { Check, Hourglass, Plus, Radio, Search, Trophy } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";

@@ -1,3 +1,5 @@
+/** The join code, set large and spaced so it reads from the back of a room. */
+
 import styles from "./JoinCode.module.css";
 
 export interface JoinCodeProps {

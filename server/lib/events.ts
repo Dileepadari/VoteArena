@@ -1,3 +1,10 @@
+/**
+ * Server-Sent Events fan-out, one channel per session code.
+ *
+ * SSE rather than WebSockets on purpose: the traffic is one-way, it survives
+ * corporate proxies that block upgrades, and the browser reconnects by itself.
+ */
+
 import type { Response } from "express";
 
 interface Subscriber {

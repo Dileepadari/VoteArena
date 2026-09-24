@@ -1,3 +1,11 @@
+/**
+ * Every read and write against the database, and the rules that go with them.
+ *
+ * The routes hold no SQL and no invariants. Anything that must be true of a
+ * session, a question or a ballot is enforced here, inside a transaction, so
+ * the same guarantees hold whichever route arrives first.
+ */
+
 import type {
   OptionDTO,
   OptionSource,

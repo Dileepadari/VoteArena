@@ -1,3 +1,11 @@
+/**
+ * Environment parsing, validated once at boot with zod.
+ *
+ * Production refuses to start without a real `SECRET_KEY`, because that key
+ * signs the voter cookies and hashes the IPs. Development mints a random one
+ * per boot, which is why a dev restart logs everybody out.
+ */
+
 import crypto from "node:crypto";
 import path from "node:path";
 import { z } from "zod";

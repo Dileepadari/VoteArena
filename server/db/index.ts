@@ -1,3 +1,10 @@
+/**
+ * The SQLite handle and its pragmas.
+ *
+ * WAL and a busy timeout are what let the write path and the many concurrent
+ * readers of a live results wall coexist in one file.
+ */
+
 import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";

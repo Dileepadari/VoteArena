@@ -1,3 +1,11 @@
+/**
+ * `ApiError`, the one error shape every route raises.
+ *
+ * Carrying the status and a stable machine-readable `code` on the error means a
+ * route never has to build a response by hand, and clients branch on the code
+ * rather than on wording that might change.
+ */
+
 export class ApiError extends Error {
   constructor(
     readonly status: number,

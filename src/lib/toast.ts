@@ -1,3 +1,5 @@
+/** A tiny toast queue, shared by every page through a subscription. */
+
 import { createContext, useContext } from "react";
 
 export type ToastTone = "info" | "good" | "bad";

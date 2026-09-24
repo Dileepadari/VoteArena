@@ -1,3 +1,10 @@
+/**
+ * A QR code for the join URL, rendered as SVG.
+ *
+ * Generated in the browser rather than fetched, so the wall keeps working on a
+ * projector with no outbound internet.
+ */
+
 import QR from "qrcode";
 import { useMemo } from "react";
 

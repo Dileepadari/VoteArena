@@ -1,3 +1,5 @@
+/** 404, with a way back to the join screen. */
+
 import { Link } from "react-router-dom";
 import { Brand } from "../components/Brand";
 import styles from "./Vote.module.css";

@@ -1,3 +1,5 @@
+/** The form for adding a question and its options. */
+
 import { useState } from "react";
 import type { QuestionType } from "../../../shared/types";
 import styles from "./Console.module.css";

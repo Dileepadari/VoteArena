@@ -1,3 +1,5 @@
+/** The projected results wall. Read-only, and sized for a room rather than a desk. */
+
 import { Expand, Shrink } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

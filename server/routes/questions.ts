@@ -1,3 +1,10 @@
+/**
+ * Questions, options and the vote endpoint.
+ *
+ * The public half is one route (`POST .../vote`); everything else is host-only
+ * and goes through `assertAdmin` before it touches the store.
+ */
+
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { z } from "zod";

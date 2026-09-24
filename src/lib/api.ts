@@ -1,3 +1,10 @@
+/**
+ * The typed HTTP client, and the one place a voter token is carried.
+ *
+ * Every response goes through the same envelope, so a caller sees either data
+ * or an `ApiError` with the server's stable `code` on it.
+ */
+
 import type {
   CreateSessionResponse,
   OptionDTO,

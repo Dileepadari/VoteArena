@@ -1,3 +1,5 @@
+/** The ranked list view of a tally, for questions with too many answers to bubble. */
+
 import { useMemo } from "react";
 import type { TallyEntry } from "../../../shared/types";
 import styles from "./Leaderboard.module.css";

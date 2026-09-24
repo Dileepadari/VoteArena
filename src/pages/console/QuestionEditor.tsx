@@ -1,3 +1,5 @@
+/** Editing one question in place, including reordering its options. */
+
 import { Play, Plus, RotateCcw, Square, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import type { QuestionDTO, ResultsVisibility, TallyDTO } from "../../../shared/types";

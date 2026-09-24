@@ -1,3 +1,10 @@
+/**
+ * The live channel every phone and wall subscribes to.
+ *
+ * The stream opens with a `hello` frame carrying the whole public state, so a
+ * client renders from one request rather than a fetch followed by a subscribe.
+ */
+
 import { Router } from "express";
 import { hub } from "../lib/events.js";
 import { asyncRoute } from "../lib/http.js";

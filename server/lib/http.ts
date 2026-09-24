@@ -1,3 +1,8 @@
+/**
+ * Request plumbing shared by every router: async error forwarding, the 404
+ * handler, and the single error handler that turns an `ApiError` into a body.
+ */
+
 import type { NextFunction, Request, RequestHandler, Response } from "express";
 import { ZodError, type ZodSchema } from "zod";
 import type { ApiErrorBody } from "../../shared/types.js";

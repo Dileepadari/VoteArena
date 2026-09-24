@@ -1,3 +1,10 @@
+/**
+ * Who is voting, and how that survives a hostile browser.
+ *
+ * Everything here is derived with an HMAC of `SECRET_KEY`, so a voter cannot
+ * mint an identity by hand, and no raw IP is ever stored.
+ */
+
 import crypto from "node:crypto";
 import type { Request, Response } from "express";
 import { config } from "../config.js";

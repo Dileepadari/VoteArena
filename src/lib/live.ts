@@ -1,3 +1,5 @@
+/** The EventSource subscription and the merged live state it produces. */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SessionDTO, TallyDTO } from "../../shared/types";
 import { api } from "./api";

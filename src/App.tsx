@@ -1,3 +1,5 @@
+/** The route table, and the shell every page renders inside. */
+
 import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { ToastProvider } from "./components/Toast";
 import { Console } from "./pages/console/Console";

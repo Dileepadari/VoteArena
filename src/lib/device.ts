@@ -1,3 +1,8 @@
+/**
+ * A localStorage mirror of the httpOnly voter cookie, plus a coarse device
+ * fingerprint used only for the host's optional strict duplicate check.
+ */
+
 const TOKEN_KEY = "votearena.voter";
 const PRINT_KEY = "votearena.print";
 

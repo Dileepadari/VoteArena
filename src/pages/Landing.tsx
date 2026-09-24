@@ -1,3 +1,5 @@
+/** The front door: create a session, or join one by code. */
+
 import { ArrowRight, MonitorPlay } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";

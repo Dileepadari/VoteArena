@@ -1,3 +1,9 @@
+/**
+ * Express wiring: security headers, compression, body limits, routers and the
+ * built SPA. Nothing here knows about voting; it only decides what reaches the
+ * routers and on what terms.
+ */
+
 import fs from "node:fs";
 import path from "node:path";
 import compression from "compression";
