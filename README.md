@@ -1,18 +1,81 @@
-<p align="center">
-  <img src="./public/logo-mark.png" width="96" alt="ADK DEV">
-</p>
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/adk_dev_logo_light.png">
+  <img src="./docs/assets/adk_dev_logo_dark.png" width="150" alt="ADK DEV" loading="lazy">
+</picture>
 
 # VoteArena
 
-Live audience voting for a room with a projector. The host puts a code and a QR on
-screen, people vote from their phones with no sign-up, and the results move on the
-wall as the votes land.
+**Live audience voting for a room with a projector. The host puts a code and a QR on screen, people vote from their phones with no sign-up, and the results move on the wall as the votes land.**
+
+<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" loading="lazy">
+<img alt="React" src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" loading="lazy">
+<img alt="Express" src="https://img.shields.io/badge/Express_4-000000?style=for-the-badge&logo=express&logoColor=white" loading="lazy">
+<br>
+<img alt="SQLite" src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" loading="lazy">
+<img alt="Tests" src="https://img.shields.io/badge/vitest_38_unit_+_9_e2e-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" loading="lazy">
+<img alt="MIT License" src="https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge" loading="lazy">
+
+<br><br>
+
+[![CI](https://github.com/Dileepadari/VoteArena/actions/workflows/ci.yml/badge.svg)](https://github.com/Dileepadari/VoteArena/actions/workflows/ci.yml)
+
+**[Developer documentation](./DEVDOC.md)** &middot; [Screenshots](#screenshots) &middot; [Features](#features) &middot; [Getting started](#getting-started)
+
+</div>
+
+---
 
 It exists because the usual options either make everyone create an account or make
 the host read results off a spreadsheet afterwards. Here the answer appears while
 the room is still watching.
 
-For architecture, data model, and setup, see **[DEVDOC.md](./DEVDOC.md)**.
+---
+
+## Screenshots
+
+Real 1440x900 renders against the built server with 39 votes cast. The app ships a
+single dark theme, set for a dim room with a projector in it, so there is one
+gallery rather than a light and dark pair.
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/01-wall.png" alt="The projected results wall: ranked bars, a live vote count, the join code and a QR" loading="lazy">
+      <p align="center"><b>The wall</b><br><sub>What the room sees. Ranked, live, with the join code always on screen.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/02-vote.png" alt="The voter screen with one answer selected and the lock-in button enabled" loading="lazy">
+      <p align="center"><b>Voting</b><br><sub>No sign-up. Pick an answer, lock it in, done.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/03-console.png" alt="The host console: question list, join panel, live results and the question settings" loading="lazy">
+      <p align="center"><b>The host console</b><br><sub>Open and close questions, watch the count, change the settings live.</sub></p>
+    </td>
+  </tr>
+</table>
+
+### On a phone
+
+The voter screen is the one that matters here: it is the only page most people in
+the room will ever open, and it has to work on a phone on a bad connection.
+
+<table>
+  <tr>
+    <td width="25%" valign="top">
+      <img src="./docs/screenshots/responsive/mobile-vote.png" alt="The voter screen at 390px wide" loading="lazy">
+      <p align="center"><sub><b>Voting</b><br>390 x 844</sub></p>
+    </td>
+    <td width="25%" valign="top">
+      <img src="./docs/screenshots/responsive/mobile-console.png" alt="The host console at 390px wide" loading="lazy">
+      <p align="center"><sub><b>Host console</b><br>390 x 844</sub></p>
+    </td>
+    <td width="50%" valign="top"></td>
+  </tr>
+</table>
+
+---
 
 ## Features
 

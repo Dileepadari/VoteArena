@@ -19,6 +19,7 @@ view, see [README.md](./README.md).
 - [The bubble field](#the-bubble-field)
 - [Environment variables](#environment-variables)
 - [Local setup](#local-setup)
+- [Continuous integration](#continuous-integration)
 - [Testing](#testing)
 - [Deployment](#deployment)
 - [Gotchas](#gotchas)
@@ -66,6 +67,34 @@ over Server-Sent Events rather than WebSockets - the traffic is one-directional
 The client renders from a single live state (`src/lib/live.ts`) fed by the stream, so
 the phone, the wall and the console all show the same thing without polling.
 
+### What a vote actually does
+
+```mermaid
+flowchart TD
+    A["POST /questions/:id/vote"] --> B{Rate limit}
+    B -- over --> X1[429]
+    B -- under --> C[resolveVoter: cookie, then header, then mint]
+    C --> D{Question open?}
+    D -- no --> X2[409 question_not_open]
+    D -- yes --> E{Already a ballot for this voter?}
+    E -- yes --> X3[409 already_voted]
+    E -- no --> F{Strict device check on?}
+    F -- "yes, and fp+ip seen" --> X4[409 device_already_voted]
+    F -- otherwise --> G[Validate options belong to this question]
+    G --> H{Within max_selections?}
+    H -- no --> X5[400]
+    H -- yes --> I["INSERT ballot"]
+    I -- UNIQUE violation --> X3
+    I -- ok --> J[INSERT vote_choices, bump revision]
+    J --> K[Coalesced tally frame to every wall and phone]
+```
+
+Every one of those checks runs inside one transaction, and the `UNIQUE
+(question_id, voter_id)` index is the real arbiter: the `SELECT` above it is a
+courtesy that produces a nicer error, not the thing that makes voting once-only.
+Two requests from the same phone racing each other both reach the insert, and
+the index decides.
+
 ## Identity and one-vote enforcement
 
 The hard guarantee is a database constraint, not application logic:
@@ -111,6 +140,28 @@ control of that session - deliberate, for a tool whose sessions last an evening.
 gate control of an existing one.
 
 ## Live updates
+
+### One channel per session
+
+```mermaid
+flowchart LR
+    A[wall] --> H((EventHub channel: session code))
+    B[phone] --> H
+    C[host console] --> H
+    S[a vote lands] --> D{frame kind}
+    D -- "state change" --> E["emit: sent now, never dropped"]
+    D -- "tally" --> F["emitCoalesced: newest wins, at most one per 120ms"]
+    E --> H
+    F --> H
+    H --> G[res.write to every subscriber]
+```
+
+A burst of votes produces one frame every 120ms rather than one per vote, which
+is the difference between a few frames a second and a few hundred in a room of
+300. State changes are never coalesced, because dropping "the question closed"
+would leave a phone showing a vote button that no longer works.
+
+
 
 `GET /api/sessions/:code/stream` opens an SSE channel. Events:
 
@@ -319,6 +370,26 @@ npm test             # vitest
 npm run test:e2e     # Playwright, builds required first
 ```
 
+## Continuous integration
+
+`.github/workflows/ci.yml`, on push to `main` or `master`, on every pull request
+and on demand. No scheduled run.
+
+| Job | What it proves |
+|---|---|
+| `build` | lint, both typecheck projects, the unit suite with a coverage floor of 85%, and a production build, on Node 20.11 and 24. 20.11 is the floor `engines.node` declares |
+| `e2e` | Playwright against `dist/server/server/index.js`, the real production build, not the dev server |
+| `audit` | `npm audit --omit=dev --audit-level=low`, because the runtime tree is six packages so any advisory there is real. The whole tree is checked separately at `high` |
+| `hygiene` | Plain ASCII, the entity forms of the same characters, and a check that no build output, database or `.env` is tracked |
+| `readme-images` | Every locally referenced README image exists |
+
+`--coverage.thresholds` is doing more than it looks: vitest exits 0 having
+collected nothing, and a coverage number is the only signal that says so.
+
+`package.json` carries two `overrides`. `qs` and `js-yaml` both reach this tree
+only through a dependency that pins an affected range (express and eslint
+respectively), so the override is the fix rather than a version bump here.
+
 ## Testing
 
 - **`tests/api.test.ts`** (30 tests) drives the real Express app through Supertest
@@ -392,3 +463,7 @@ a read timeout longer than the 25s keepalive.
 - **`db.exec(SCHEMA_SQL)` runs on every boot.** Every statement must stay
   `IF NOT EXISTS`. There is no migration runner yet; adding a column to a deployed
   instance needs one.
+
+---
+
+Working notes, dead ends and decisions too small for this document: [not_for_you.md](./not_for_you.md).

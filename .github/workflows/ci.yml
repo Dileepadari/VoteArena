@@ -137,25 +137,21 @@ jobs:
           fi
           echo "clean"
 
-  readme-pair:
-    name: README-light.md is in sync
+  readme-images:
+    name: Every README image exists
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v7
-        with:
-          node-version: "24"
-
-      - name: Regenerate and compare
-        run: |
-          node scripts/build-light-readme.mjs
-          git diff --exit-code README-light.md
-
-      - name: Every local image referenced by either README exists
+      # There is no README-light.md to keep in sync: the app ships one dark
+      # theme, set for a dim room with a projector, so a light gallery would be
+      # the same screenshots with a different filename. What still matters is
+      # that an <img src> points at a file somebody committed, because a broken
+      # image renders as a broken image on github.com and nowhere else.
+      - name: Every local image referenced by the README exists
         run: |
           missing=0
-          for f in $(grep -ho 'src="[^"]*"' README.md README-light.md \
+          for f in $(grep -ho 'src="[^"]*"' README.md \
                      | sed 's/^src="//; s/"$//; s|^\./||' | grep -v '^https\?://' | sort -u); do
             if [ ! -f "$f" ]; then
               echo "missing: $f"
