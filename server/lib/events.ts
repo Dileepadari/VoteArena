@@ -33,16 +33,28 @@ export class EventHub {
     set.add(sub);
     this.ensureKeepalive();
 
-    return () => {
-      const current = this.channels.get(code);
-      if (!current) return;
-      current.delete(sub);
-      if (current.size === 0) {
-        this.channels.delete(code);
-        this.clearChannel(code);
-      }
-      if (this.channels.size === 0) this.stopKeepalive();
-    };
+    return () => this.drop(code, sub);
+  }
+
+  /**
+   * Remove one subscriber and tidy up behind it.
+   *
+   * Both ways a subscriber can leave go through here. They used to be separate:
+   * the disposer below cleaned up the channel, while a failed write in `emit`
+   * only removed the subscriber from the set. A channel that lost every
+   * subscriber to socket errors was therefore left behind as an empty Set, with
+   * its pending frames and flush timer still held and the keepalive interval
+   * still pinging it every 25 seconds, forever.
+   */
+  private drop(code: string, sub: Subscriber): void {
+    const current = this.channels.get(code);
+    if (!current) return;
+    current.delete(sub);
+    if (current.size === 0) {
+      this.channels.delete(code);
+      this.clearChannel(code);
+    }
+    if (this.channels.size === 0) this.stopKeepalive();
   }
 
   subscriberCount(code: string): number {
@@ -54,13 +66,17 @@ export class EventHub {
     const set = this.channels.get(code);
     if (!set || set.size === 0) return;
     const frame = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+    const dead: Subscriber[] = [];
     for (const sub of set) {
       try {
         sub.res.write(frame);
       } catch {
-        set.delete(sub);
+        dead.push(sub);
       }
     }
+    // Collected first, then dropped, so the tidy-up in `drop` cannot delete the
+    // channel out from under the loop that is still walking it.
+    for (const sub of dead) this.drop(code, sub);
   }
 
   /**
