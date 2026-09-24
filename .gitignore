@@ -18,6 +18,7 @@ data/
 
 # Test artefacts
 test-results/
+coverage/
 playwright-report/
 tests/e2e/.tmp/
 
