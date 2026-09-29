@@ -56,10 +56,13 @@ gallery rather than a light and dark pair.
   </tr>
 </table>
 
-### On a phone
+### On a phone and a tablet
 
 The voter screen is the one that matters here: it is the only page most people in
-the room will ever open, and it has to work on a phone on a bad connection.
+the room will ever open, and it has to work on a phone on a bad connection. The
+console is the other half of that: a host often runs the room from a tablet
+rather than a laptop, and at 820px the sidebar stacks above the results instead
+of beside them.
 
 <table>
   <tr>
@@ -71,7 +74,10 @@ the room will ever open, and it has to work on a phone on a bad connection.
       <img src="./docs/screenshots/responsive/mobile-console.png" alt="The host console at 390px wide" loading="lazy">
       <p align="center"><sub><b>Host console</b><br>390 x 844</sub></p>
     </td>
-    <td width="50%" valign="top"></td>
+    <td width="50%" valign="top">
+      <img src="./docs/screenshots/responsive/tablet-console.png" alt="The host console at 820px wide, with the join panel stacked above the results" loading="lazy">
+      <p align="center"><sub><b>Host console on a tablet</b><br>820 x 780</sub></p>
+    </td>
   </tr>
 </table>
 
